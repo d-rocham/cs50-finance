@@ -11,7 +11,8 @@
             "module": "flask",
             "env": {
                 "FLASK_APP": "application.py",
-                "FLASK_ENV": "development"
+                "FLASK_ENV": "development",
+                "API_KEY": "pk_50b635ec6ed94958956473499a25881b"
             },
             "args": [
                 "run",

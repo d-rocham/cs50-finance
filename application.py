@@ -1,6 +1,6 @@
 import os
 
-#from cs50 import SQL
+# from cs50 import SQL
 from flask_sqlalchemy import SQLAlchemy
 from flask import Flask, flash, redirect, render_template, request, session
 from flask_session import Session
@@ -25,6 +25,7 @@ def after_request(response):
     response.headers["Pragma"] = "no-cache"
     return response
 
+
 # Custom filter
 app.jinja_env.filters["usd"] = usd
 
@@ -37,20 +38,26 @@ Session(app)
 # Open database
 basedir = os.path.abspath(os.path.dirname(__file__))
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(basedir, 'finance.db')
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///" + os.path.join(
+    basedir, "finance.db"
+)
+app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
 db = SQLAlchemy(app)
 
+
 class Users(db.Model):
     __tablename__ = "users"
-    id = db.Column(db.Integer, primary_key = True)
-    username = db.Column(db.String(30), unique = True, nullable = False)
-    hash = db.Column(db.String(60), unique = True, nullable = False) #figure out hash lenght later
-    cash = db.Column(db.Numeric, nullable = False, default = 10000.00)
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(30), unique=True, nullable=False)
+    hash = db.Column(
+        db.String(60), unique=True, nullable=False
+    )  # figure out hash lenght later
+    cash = db.Column(db.Numeric, nullable=False, default=10000.00)
 
     def __repr__(self):
         return f"User('{self.id}', '{self.username}', '{self.cash}')"
+
 
 # Make sure API key is set
 if not os.environ.get("API_KEY"):
@@ -97,10 +104,14 @@ def login():
             return apology("must provide password", 403)
 
         # Query database for username
-        rows = db.execute("SELECT * FROM users WHERE username = ?", request.form.get("username"))
+        rows = db.execute(
+            "SELECT * FROM users WHERE username = ?", request.form.get("username")
+        )
 
         # Ensure username exists and password is correct
-        if len(rows) != 1 or not check_password_hash(rows[0]["hash"], request.form.get("password")):
+        if len(rows) != 1 or not check_password_hash(
+            rows[0]["hash"], request.form.get("password")
+        ):
             return apology("invalid username and/or password", 403)
 
         # Remember which user has logged in
@@ -135,7 +146,7 @@ def quote():
 @app.route("/register", methods=["GET", "POST"])
 def register():
     """Register user"""
-    return apology("TODO")
+    return render_template("register.html")
 
 
 @app.route("/sell", methods=["GET", "POST"])
