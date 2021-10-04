@@ -5,6 +5,43 @@ Register
 {% endblock %}
 
 {% block main %}
+<!--TODO: Replace all this with incoming form-->
+<!--TODO: check how to re style with incoming form from server-->
+<!--TODO: How to put a placeholder attribute in WTForms imported fields?-->
+<!--TODO: What about other attributes? Check WTForms documentation-->
+
+<div>
+    <form action="" method="post" action="" class="register__form">
+        {{ form.hidden_tag() }}
+        <fieldset class="register__fieldset form-group">
+            <legend>Join Today!</legend>
+            <div class="form-group">
+                {{ form.username.label(class="register__label form-group") }}
+                {{ form.username(class= "form-control") }}
+            </div>
+            <div class="form-group">
+                {{ form.email.label(class="register__label form-group") }}
+                {{ form.email(class="form-control") }}
+            </div>
+            <div class="form-group">
+                {{ form.password.label(class="register__label form-group") }}
+                {{ form.password(class="form-control") }}
+            </div>
+            <div class="form-group">
+                {{ form.passwordConfirmation.label(class="register__label form-group") }}
+                {{ form.passwordConfirmation(class="form-control") }}
+            </div>
+            <div class="form-group">
+                {{ form.submit(class="btn btn-primary") }}
+            </div>
+        </fieldset>
+    </form>
+</div>
+
+
+
+
+<!--
 <form action="" method="post" class="register__form">
     <fieldset class="register__fieldset">
         <label for="" class="register__label form-group">
@@ -13,21 +50,21 @@ Register
         </label>
         <label for="" class="register__label form-group" required>
             Choose a username
-            <!--TODO: As user types, check database to see if username already exists-->
+            <!--TODO: As user types, check database to see if username already exists
             <input type="text" name="" id="" class="form-control" required>
         </label>
         <label for="" class="register__label form-group" required>
             Choose a password
-            <!--TODO: As user types, check password security-->
+            <!--TODO: As user types, check password security
             <input type="password" name="" id="" class="form-control" required>
         </label>
         <label for="" class="register__label form-group">
             Repeat your password, please
-            <!--TODO: As user types down check that passwords are equal-->
+            <!--TODO: As user types down check that passwords are equal
             <input type="password" name="" id="" class="form-control" required>
         </label>
         <input type="submit" value="Register now!" class="btn btn-primary">
     </fieldset>
 </form>
-
+-->
 {% endblock %}

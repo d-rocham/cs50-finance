@@ -3,7 +3,8 @@ import re
 import re
 
 from flask_sqlalchemy import SQLAlchemy
-from flask_wtf import FlaskForm, StringField, PasswordField, SubmitField, BooleanField
+from flask_wtf import FlaskForm
+from wtforms import StringField, PasswordField, SubmitField, BooleanField
 from wtforms.validators import DataRequired, EqualTo, Length, Email, EqualTo, Regexp
 
 from flask import Flask, flash, redirect, render_template, request, session
@@ -48,7 +49,7 @@ passwordReMessage = "Your password must contain at least 8 characters, at least 
 
 
 class RegistrationForm(FlaskForm):
-    userame = StringField(
+    username = StringField(
         "Username", validators=[DataRequired(), Length(min=5, max=20)]
     )
     email = StringField("Email", validators=[DataRequired(), Email()])
