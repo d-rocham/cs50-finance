@@ -119,7 +119,6 @@ if not os.environ.get("API_KEY"):
 @app.route("/login", methods=["GET", "POST"])
 def login():
     """Log user in"""
-
     # Forget any user_id
     session.clear()
 
@@ -153,7 +152,9 @@ def login():
 
     # User reached route via GET (as by clicking a link or via redirect)
     else:
-        return render_template("login.html")
+        # Instanciate LoginForm
+        form = LoginForm()
+        return render_template("login.html", form=form)
 
 
 @app.route("/logout")
@@ -170,7 +171,8 @@ def logout():
 @app.route("/register", methods=["GET", "POST"])
 def register():
     """Register user"""
-    return render_template("register.html")
+    form = RegistrationForm()
+    return render_template("register.html", form=form)
 
 
 @app.route("/")
