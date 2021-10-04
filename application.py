@@ -1,10 +1,13 @@
 import os
 
-# from cs50 import SQL
 from flask_sqlalchemy import SQLAlchemy
+from flask_wtf import FlaskForm, StringField, PasswordField, SubmitField, BooleanField
+from wtforms.validators import DataRequired, EqualTo, Length, Email, EqualTo
+
 from flask import Flask, flash, redirect, render_template, request, session
 from flask_session import Session
 from tempfile import mkdtemp
+from flask_wtf.recaptcha import validators
 from werkzeug.exceptions import default_exceptions, HTTPException, InternalServerError
 from werkzeug.security import check_password_hash, generate_password_hash
 
@@ -13,9 +16,8 @@ from helpers import apology, login_required, lookup, usd
 # Configure application
 app = Flask(__name__)
 
-# Ensure templates are auto-reloaded
 app.config["TEMPLATES_AUTO_RELOAD"] = True
-
+app.config["SECRET_KEY"] = "9d7daea4a862dd6513fee22b8223ad73"
 
 # Ensure responses aren't cached
 @app.after_request
@@ -35,7 +37,31 @@ app.config["SESSION_PERMANENT"] = False
 app.config["SESSION_TYPE"] = "filesystem"
 Session(app)
 
+# Create forms.
+
+
+class RegistrationForm(FlaskForm):
+    userame = StringField(
+        "Username", validators=[DataRequired(), Length(min=5, max=20)]
+    )
+    email = StringField("Email", validators=[DataRequired(), Email()])
+    password = PasswordField("Password", validators=[DataRequired(), Length(min=8)])
+    passwordConfirmation = PasswordField(
+        "Confirm Password",
+        validators=[DataRequired(), Length(min=8), EqualTo("password")],
+    )
+    submit = SubmitField("Sign Up")
+
+
+class LoginForm(FlaskForm):
+    email = StringField("Email", validators=[DataRequired(), Email()])
+    password = PasswordField("Password", validators=[DataRequired(), Length(min=8)])
+    remember = BooleanField("Remember Me")
+    submit = SubmitField("Login")
+
+
 # Open database
+# TODO: check that this is working properly through debugger.
 basedir = os.path.abspath(os.path.dirname(__file__))
 
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///" + os.path.join(
