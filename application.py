@@ -1,8 +1,10 @@
 import os
+import re
+import re
 
 from flask_sqlalchemy import SQLAlchemy
 from flask_wtf import FlaskForm, StringField, PasswordField, SubmitField, BooleanField
-from wtforms.validators import DataRequired, EqualTo, Length, Email, EqualTo
+from wtforms.validators import DataRequired, EqualTo, Length, Email, EqualTo, Regexp
 
 from flask import Flask, flash, redirect, render_template, request, session
 from flask_session import Session
@@ -39,13 +41,29 @@ Session(app)
 
 # Create forms.
 
+passwordRe = re.compile(
+    "^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$ %^&*-]).{8,}$"
+)
+passwordReMessage = "Your password must contain at least 8 characters, at least one UPPER case letter, one lower case letter, one number and one special character"
+
 
 class RegistrationForm(FlaskForm):
     userame = StringField(
         "Username", validators=[DataRequired(), Length(min=5, max=20)]
     )
     email = StringField("Email", validators=[DataRequired(), Email()])
-    password = PasswordField("Password", validators=[DataRequired(), Length(min=8)])
+    password = PasswordField(
+        "Password",
+        validators=[
+            DataRequired(),
+            Length(min=8),
+            Regexp(
+                passwordRe,
+                flags=0,
+                message=passwordReMessage,
+            ),
+        ],
+    )
     passwordConfirmation = PasswordField(
         "Confirm Password",
         validators=[DataRequired(), Length(min=8), EqualTo("password")],
@@ -55,13 +73,21 @@ class RegistrationForm(FlaskForm):
 
 class LoginForm(FlaskForm):
     email = StringField("Email", validators=[DataRequired(), Email()])
-    password = PasswordField("Password", validators=[DataRequired(), Length(min=8)])
+    password = PasswordField(
+        "Password",
+        validators=[
+            DataRequired(),
+            Length(min=8),
+            Regexp(passwordRe, flags=0, message=passwordReMessage),
+        ],
+    )
     remember = BooleanField("Remember Me")
     submit = SubmitField("Login")
 
 
 # Open database
 # TODO: check that this is working properly through debugger.
+# TODO: organize this better
 basedir = os.path.abspath(os.path.dirname(__file__))
 
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///" + os.path.join(
@@ -88,27 +114,6 @@ class Users(db.Model):
 # Make sure API key is set
 if not os.environ.get("API_KEY"):
     raise RuntimeError("API_KEY not set")
-
-
-@app.route("/")
-@login_required
-def index():
-    """Show portfolio of stocks"""
-    return apology("TODO")
-
-
-@app.route("/buy", methods=["GET", "POST"])
-@login_required
-def buy():
-    """Buy shares of stock"""
-    return apology("TODO")
-
-
-@app.route("/history")
-@login_required
-def history():
-    """Show history of transactions"""
-    return apology("TODO")
 
 
 @app.route("/login", methods=["GET", "POST"])
@@ -162,17 +167,38 @@ def logout():
     return redirect("/")
 
 
+@app.route("/register", methods=["GET", "POST"])
+def register():
+    """Register user"""
+    return render_template("register.html")
+
+
+@app.route("/")
+@login_required
+def index():
+    """Show portfolio of stocks"""
+    return apology("TODO")
+
+
+@app.route("/buy", methods=["GET", "POST"])
+@login_required
+def buy():
+    """Buy shares of stock"""
+    return apology("TODO")
+
+
+@app.route("/history")
+@login_required
+def history():
+    """Show history of transactions"""
+    return apology("TODO")
+
+
 @app.route("/quote", methods=["GET", "POST"])
 @login_required
 def quote():
     """Get stock quote."""
     return apology("TODO")
-
-
-@app.route("/register", methods=["GET", "POST"])
-def register():
-    """Register user"""
-    return render_template("register.html")
 
 
 @app.route("/sell", methods=["GET", "POST"])
