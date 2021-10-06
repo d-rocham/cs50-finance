@@ -126,15 +126,23 @@ def login():
 
     if request.method == "POST":
         # TODO: this manual checks will be replaced by WTForms checks
-        # Ensure username was submitted
-        if not request.form.get("username"):
+
+        if form.validate_on_submit():  # If form validation succesful
+            flash(f"Loged in as {form.email.data}!")
+            return redirect(url_for("index"))
+        else:
+            return render_template("login.html", form=form)
+
+        # ATTENTION: Commented-out block below should be removed after form validation and form failure are tested
+        """ if not request.form.get("username"):
             return apology("must provide username", 403)
 
         # Ensure password was submitted
         elif not request.form.get("password"):
-            return apology("must provide password", 403)
+            return apology("must provide password", 403) """
 
-        # Query database for username
+        # ATTENTION: Commented-out block below will be replaced with respective library.
+        """ # Query database for username
         rows = db.execute(
             "SELECT * FROM users WHERE username = ?", request.form.get("username")
         )
@@ -149,7 +157,7 @@ def login():
         session["user_id"] = rows[0]["id"]
 
         # Redirect user to home page
-        return redirect("/")
+        return redirect("/") """
 
     # User reached route via GET (as by clicking a link or via redirect)
     else:
