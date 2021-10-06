@@ -120,13 +120,12 @@ if not os.environ.get("API_KEY"):
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
-    """Log user in"""
+    form = LoginForm()
     # Forget any user_id
     session.clear()
 
-    # User reached route via POST (as by submitting a form via POST)
     if request.method == "POST":
-
+        # TODO: this manual checks will be replaced by WTForms checks
         # Ensure username was submitted
         if not request.form.get("username"):
             return apology("must provide username", 403)
@@ -154,8 +153,6 @@ def login():
 
     # User reached route via GET (as by clicking a link or via redirect)
     else:
-        # Instanciate LoginForm
-        form = LoginForm()
         return render_template("login.html", form=form)
 
 

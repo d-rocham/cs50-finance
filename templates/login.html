@@ -1,17 +1,58 @@
 {% extends "layout.html" %}
 
 {% block title %}
-    Log In
+Log In
 {% endblock %}
 
 {% block main %}
-    <form action="/login" method="post">
+<form action="" method="post">
+    {{ form.hidden_tag() }}
+    <fieldset class="login__fieldset form-group">
+        <legend>Login!</legend>
+
         <div class="form-group">
-            <input autocomplete="off" autofocus class="form-control" name="username" placeholder="Username" type="text">
+            {{ form.email.label(class"login__label form-group) }}
+
+            {% if form.email.errors %}
+            {{ form.email(class="form-control is-invalid") }}
+            <div class="invalid-feedback">
+                {% for error in form.username.errors %}
+                <span> {{ error }} </span>
+                {% endfor %}
+            </div>
+            {% else %}
+            {{ form.email(class="form-control")}}
+            {% endif %}
         </div>
         <div class="form-group">
-            <input class="form-control" name="password" placeholder="Password" type="password">
+            {{ form.password.label(class"login__label form-group) }}
+
+            {% if form.password.errors %}
+            {{ form.password(class="form-control is-invalid") }}
+            <div class="invalid-feedback">
+                {% for error in form.username.errors %}
+                <span> {{ error }} </span>
+                {% endfor %}
+            </div>
+            {% else %}
+            {{ form.password(class="form-control")}}
+            {% endif %}
         </div>
-        <button class="btn btn-primary" type="submit">Log In</button>
-    </form>
+        <div class="form-group">
+            {{ form.submit(class="btn btn-primary")}}
+        </div>
+        <div class="small text-center text-muted">
+            <small>No account yet? <a href="{{ url_for('register') }}">Register now!</a></small>
+        </div>
+    </fieldset>
+
+    <!--TODO: erase below after-->
+    <div class="form-group">
+        <input autocomplete="off" autofocus class="form-control" name="username" placeholder="Username" type="text">
+    </div>
+    <div class="form-group">
+        <input class="form-control" name="password" placeholder="Password" type="password">
+    </div>
+    <button class="btn btn-primary" type="submit">Log In</button>
+</form>
 {% endblock %}
