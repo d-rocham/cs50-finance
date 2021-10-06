@@ -6,6 +6,7 @@ Log In
 
 {% block main %}
 <form action="" method="post">
+    <!--TODO: Re style-->
     {{ form.hidden_tag() }}
     <fieldset class="login__fieldset form-group">
         <legend>Login!</legend>
@@ -14,28 +15,29 @@ Log In
             {{ form.email.label(class= "login__label form-group") }}
 
             {% if form.email.errors %}
-            {{ form.email(class="form-control is-invalid") }}
+            {{ form.email(class="form-control is-invalid", placeholder = "Email", autocomplete = "off") }}
             <div class="invalid-feedback">
                 {% for error in form.email.errors %}
                 <span> {{ error }} </span>
                 {% endfor %}
             </div>
             {% else %}
-            {{ form.email(class="form-control")}}
+            {{ form.email(class="form-control", placeholder = "Email", autocomplete = "off")}}
             {% endif %}
         </div>
         <div class="form-group">
             {{ form.password.label(class= "login__label form-group") }}
 
             {% if form.password.errors %}
-            {{ form.password(class="form-control is-invalid") }}
+            {{ form.password(class="form-control is-invalid", placeholder ="Enter your password", autocomplete = "off")
+            }}
             <div class="invalid-feedback">
                 {% for error in form.password.errors %}
                 <span> {{ error }} </span>
                 {% endfor %}
             </div>
             {% else %}
-            {{ form.password(class="form-control")}}
+            {{ form.password(class="form-control", placeholder ="Enter your password", autocomplete = "off")}}
             {% endif %}
         </div>
         <div class="form-group">

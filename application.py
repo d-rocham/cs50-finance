@@ -122,14 +122,13 @@ if not os.environ.get("API_KEY"):
 def login():
     form = LoginForm()
     # Forget any user_id
-    session.clear()
+    session.clear()  # TODO: check this later on. Why is it here?
 
     if request.method == "POST":
-        # TODO: this manual checks will be replaced by WTForms checks
-
         if form.validate_on_submit():  # If form validation succesful
-            flash(f"Loged in as {form.email.data}!")
-            return redirect(url_for("index"))
+            flash(f"Loged in as {form.email.data}!", "success")
+            return apology("LOGGED IN!")
+            # Session.clear() prevents apology to work.
         else:
             return render_template("login.html", form=form)
 
