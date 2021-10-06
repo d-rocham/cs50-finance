@@ -9,30 +9,75 @@ Register
 <!--TODO: check how to re style with incoming form from server-->
 <!--TODO: How to put a placeholder attribute in WTForms imported fields?-->
 <!--TODO: What about other attributes? Check WTForms documentation-->
+<!--TODO: Re style-->
 
 <div>
     <form action="" method="post" action="" class="register__form">
         {{ form.hidden_tag() }}
         <fieldset class="register__fieldset form-group">
             <legend>Join Today!</legend>
+            <!--ATTENTION: If formatting classes are modified in regular non-error input, they must be added to the is-invalid as well-->
             <div class="form-group">
                 {{ form.username.label(class="register__label form-group") }}
+
+                {% if form.username.errors %}
+                {{ form.username(class= "form-control is-invalid") }}
+                <div class="invalid-feedback">
+                    {% for error in form.username.errors %}
+                    <span> {{ error }} </span>
+                    {% endfor %}
+                </div>
+                {% else %}
                 {{ form.username(class= "form-control") }}
+                {% endif %}
             </div>
             <div class="form-group">
                 {{ form.email.label(class="register__label form-group") }}
+
+                {% if form.email.errors %}
+                {{ form.email(class="form-control is-invalid") }}
+                <div class="invalid-feedback">
+                    {% for error in form.email.errors %}
+                    <span> {{ error }} </span>
+                    {% endfor %}
+                </div>
+                {% else %}
                 {{ form.email(class="form-control") }}
+                {% endif %}
             </div>
             <div class="form-group">
                 {{ form.password.label(class="register__label form-group") }}
+
+                {% if form.password.errors %}
+                {{ form.password(class="form-control is-invalid") }}
+                <div class="invalid-feedback">
+                    {% for error in form.password.errors %}
+                    <span> {{ error }} </span>
+                    {% endfor %}
+                </div>
+                {% else %}
                 {{ form.password(class="form-control") }}
+                {% endif %}
             </div>
             <div class="form-group">
                 {{ form.passwordConfirmation.label(class="register__label form-group") }}
+
+                {% if form.passwordConfirmation.errors %}
+                {{ form.passwordConfirmation(class="form-control is-invalid") }}
+                <div class="invalid-feedback">
+                    {% for error in form.passwordConfirmation.errors %}
+                    <span> {{ error }} </span>
+                    {% endfor %}
+                </div>
+                {% else %}
                 {{ form.passwordConfirmation(class="form-control") }}
+                {% endif %}
             </div>
             <div class="form-group">
                 {{ form.submit(class="btn btn-primary") }}
+            </div>
+            <div class="small text-center text-muted">
+                <small> Already have an account? <a href="{{ url_for('login')}}">Log in instead!</a></small>
             </div>
         </fieldset>
     </form>

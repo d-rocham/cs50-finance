@@ -1,6 +1,7 @@
 import os
 import re
 import re
+from flask.helpers import url_for
 
 from flask_sqlalchemy import SQLAlchemy
 from flask_wtf import FlaskForm
@@ -173,7 +174,23 @@ def logout():
 def register():
     """Register user"""
     form = RegistrationForm()
-    return render_template("register.html", form=form)
+
+    if request.method == "POST":
+        if form.validate_on_submit():
+            # TODO: store credentials in database
+            flash(
+                f"Account created for {form.username.data} with email {form.email.data}!",
+                "success",
+            )
+            return apology("DONE")
+            # redirect(url_for("index")) TODO: once database is implemented, do redirecto to index.
+        else:
+            return render_template("register.html", form=form)
+            # TODO: what to do if form validation fails?
+
+        # TODO: If user is already logged in, alert() that he already has an account, redirect to index
+    else:
+        return render_template("register.html", form=form)
 
 
 @app.route("/")
