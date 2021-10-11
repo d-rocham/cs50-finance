@@ -1,21 +1,17 @@
 import os
-import re
-import re
 from flask.helpers import url_for
 
 from flask_sqlalchemy import SQLAlchemy
-from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, SubmitField, BooleanField
-from wtforms.validators import DataRequired, EqualTo, Length, Email, EqualTo, Regexp
 
 from flask import Flask, flash, redirect, render_template, request, session
 from flask_session import Session
 from tempfile import mkdtemp
-from flask_wtf.recaptcha import validators
+
 from werkzeug.exceptions import default_exceptions, HTTPException, InternalServerError
 from werkzeug.security import check_password_hash, generate_password_hash
 
 from helpers import apology, login_required, lookup, usd
+from forms import RegistrationForm, LoginForm
 
 # Configure application
 app = Flask(__name__)
@@ -41,52 +37,6 @@ app.config["SESSION_PERMANENT"] = False
 app.config["SESSION_TYPE"] = "filesystem"
 Session(app)
 
-# Create forms.
-
-passwordRe = re.compile(
-    "^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$ %^&*-]).{8,}$"
-)
-passwordReMessage = "Your password must contain at least 8 characters, at least one UPPER case letter, one lower case letter, one number and one special character"
-
-
-class RegistrationForm(FlaskForm):
-    username = StringField(
-        "Username", validators=[DataRequired(), Length(min=5, max=20)]
-    )
-    email = StringField("Email", validators=[DataRequired(), Email()])
-    password = PasswordField(
-        "Password",
-        validators=[
-            DataRequired(),
-            Length(min=8),
-            Regexp(
-                passwordRe,
-                flags=0,
-                message=passwordReMessage,
-            ),
-        ],
-    )
-    passwordConfirmation = PasswordField(
-        "Confirm Password",
-        validators=[DataRequired(), Length(min=8), EqualTo("password")],
-    )
-    submit = SubmitField("Sign Up")
-
-
-class LoginForm(FlaskForm):
-    email = StringField("Email", validators=[DataRequired(), Email()])
-    password = PasswordField(
-        "Password",
-        validators=[
-            DataRequired(),
-            Length(min=8),
-            Regexp(passwordRe, flags=0, message=passwordReMessage),
-        ],
-    )
-    remember = BooleanField("Remember Me")
-    submit = SubmitField("Login")
-
-
 # Open database
 # TODO: check that this is working properly through debugger.
 # TODO: organize this better
@@ -101,16 +51,16 @@ db = SQLAlchemy(app)
 
 
 class Users(db.Model):
+    # TODO: figure out hash lenght later
     __tablename__ = "users"
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(30), unique=True, nullable=False)
-    hash = db.Column(
-        db.String(60), unique=True, nullable=False
-    )  # figure out hash lenght later
+    email = db.Column(db.String(20), unique=True, nullable=False)
+    hash = db.Column(db.String(60), nullable=False)
     cash = db.Column(db.Numeric, nullable=False, default=10000.00)
 
     def __repr__(self):
-        return f"User('{self.id}', '{self.username}', '{self.cash}')"
+        return f"User('{self.id}', '{self.username}', '{self.email}', {self.cash}')"
 
 
 # Make sure API key is set
