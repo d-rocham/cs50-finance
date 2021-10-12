@@ -8,5 +8,7 @@ __pycache__/
 #Don't ignore launch.json, which includes API key
 !.vscode/launch.json
 
+#Ignore TODO.txt
+TODO.txt
 
 

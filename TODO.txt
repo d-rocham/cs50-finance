@@ -1,0 +1,17 @@
+C$50 Finance
+    Register
+    Login
+    Change password / Forgot password
+    Logout
+    
+    Quote, Buy, Sell in the same page
+        Enable search through both company name & index name
+        (try) Make indexes to appear as user types down
+        (try) alert user (not through alert()) when an index he has has gone up a certain threshold
+        
+    Transaction history in separate page
+    
+    -> Design database
+    -> Turn application.py into separate files (Corey Schaffer)
+    -> User login through Corey & Grinberg instructions
+    -> Enable JavaScript
