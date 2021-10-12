@@ -10,20 +10,30 @@ class AccessForm(FlaskForm):
     """
     Defines common properties and variables.
     Defines common fields.
+    Defines failed validation messages
     """
 
     # Define common properties
     passwordRe = re.compile(
         "^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$ %^&*-]).{8,}$"
     )
-    failed_pwrd_validation_msg = "Your password must contain at least 8 characters, at least one UPPER case letter, one lower case letter, one number and one special character"
 
     min_pwrd_len = 8
     min_usr_len = 5
     max_usr_len = 20
 
+    failed_validation_messages = {
+        "password": f"Your password must contain at least {min_pwrd_len} characters long, at least one UPPER case letter, one lower case letter, one number and one special character",
+        "username": f"Your username should have between {min_usr_len} and {max_usr_len} characters long",
+        "email": "Please provide a valid email address",
+        "password_confirmation": "The passwords do not match",
+    }
+
     # Define common fields
-    email = StringField("Email", validators=[DataRequired(), Email()])
+    email = StringField(
+        "Email",
+        validators=[DataRequired(), Email(message=failed_validation_messages["email"])],
+    )
     password = PasswordField(
         "Password",
         validators=[
@@ -32,19 +42,22 @@ class AccessForm(FlaskForm):
             Regexp(
                 passwordRe,
                 flags=0,
-                message=failed_pwrd_validation_msg,
+                message=failed_validation_messages["password"],
             ),
         ],
     )
 
 
 class RegistrationForm(AccessForm):
-    # TODO: Not all the fiels from AccessForm are needed here.
     username = StringField(
         "Username",
         validators=[
             DataRequired(),
-            Length(min=AccessForm.min_usr_len, max=AccessForm.max_usr_len),
+            Length(
+                min=AccessForm.min_usr_len,
+                max=AccessForm.max_usr_len,
+                message=AccessForm.failed_validation_messages["username"],
+            ),
         ],
     )
 
@@ -52,9 +65,13 @@ class RegistrationForm(AccessForm):
         "Confirm Password",
         validators=[
             DataRequired(),
-            Length(min=AccessForm.min_pwrd_len),
+            Length(
+                min=AccessForm.min_pwrd_len,
+                message=AccessForm.failed_validation_messages["password"],
+            ),
             EqualTo(
-                AccessForm.password
+                "password",
+                message=AccessForm.failed_validation_messages["password_confirmation"],
             ),  # TODO: check if this works. It isn't a string.
         ],
     )
