@@ -18,21 +18,23 @@ Register
 
                 {% if form.username.errors %}
                 {{ form.username(class= "form-control is-invalid", placeholder = "Choose an username", autocomplete =
-                "off") }}
+                "off", minlength = form.username.validators[1].min, maxlength = form.username.validators[1].max ) }}
                 <div class="invalid-feedback">
                     {% for error in form.username.errors %}
                     <span> {{ error }} </span>
                     {% endfor %}
                 </div>
                 {% else %}
-                {{ form.username(class= "form-control", placeholder = "Choose an username", autocomplete = "off") }}
+                {{ form.username(class= "form-control", placeholder = "Choose an username", autocomplete = "off",
+                minlength = form.username.validators[1].min, maxlength = form.username.validators[1].max ) }}
                 {% endif %}
             </div>
             <div class="form-group">
                 {{ form.email.label(class="register__label form-group") }}
 
                 {% if form.email.errors %}
-                {{ form.email(class="form-control is-invalid", placeholder = "Enter your email", autocomplete = "off")
+                {{ form.email(class="form-control is-invalid", placeholder = "Enter your email", autocomplete = "off",
+                type = "email")
                 }}
                 <div class="invalid-feedback">
                     {% for error in form.email.errors %}
@@ -40,7 +42,8 @@ Register
                     {% endfor %}
                 </div>
                 {% else %}
-                {{ form.email(class="form-control", placeholder = "Enter your email", autocomplete = "off") }}
+                {{ form.email(class="form-control", placeholder = "Enter your email", autocomplete = "off", type =
+                "email") }}
                 {% endif %}
             </div>
             <div class="form-group">
@@ -48,14 +51,15 @@ Register
 
                 {% if form.password.errors %}
                 {{ form.password(class="form-control is-invalid", placeholder = "Create a strong password!",
-                autocomplete = "off") }}
+                autocomplete = "off", minlength = form.password.validators[1].min) }}
                 <div class="invalid-feedback">
                     {% for error in form.password.errors %}
                     <span> {{ error }} </span>
                     {% endfor %}
                 </div>
                 {% else %}
-                {{ form.password(class="form-control", placeholder = "Create a strong password!", autocomplete = "off")
+                {{ form.password(class="form-control", placeholder = "Create a strong password!", autocomplete = "off",
+                minlength = form.password.validators[1].min)
                 }}
                 {% endif %}
             </div>

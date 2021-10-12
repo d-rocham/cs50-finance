@@ -51,6 +51,7 @@ class AccessForm(FlaskForm):
 
 
 class RegistrationForm(AccessForm):
+
     username = StringField(
         "Username",
         validators=[
