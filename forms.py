@@ -13,7 +13,8 @@ class AccessForm(FlaskForm):
     Defines failed validation messages
     """
 
-    # Define common properties
+    # Length limits, password RegEx
+
     passwordRe = re.compile(
         "^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$ %^&*-]).{8,}$"
     )
@@ -22,9 +23,10 @@ class AccessForm(FlaskForm):
     min_usr_len = 5
     max_usr_len = 20
 
+    # Failed validation messages for each field
     failed_validation_messages = {
-        "password": f"Your password must contain at least {min_pwrd_len} characters long, at least one UPPER case letter, one lower case letter, one number and one special character",
-        "username": f"Your username should have between {min_usr_len} and {max_usr_len} characters long",
+        "password": f"Your password must have at least one UPPER case letter, one lower case letter, one number and one special character",
+        "username": f"Your username should be between {min_usr_len} and {max_usr_len} characters long",
         "email": "Please provide a valid email address",
         "password_confirmation": "The passwords do not match",
     }
@@ -72,14 +74,16 @@ class RegistrationForm(AccessForm):
             EqualTo(
                 "password",
                 message=AccessForm.failed_validation_messages["password_confirmation"],
-            ),  # TODO: check if this works. It isn't a string.
+            ),
         ],
     )
     submit = SubmitField("Sign Up")
 
 
 class LoginForm(AccessForm):
-    # TODO: Not all the fiels from AccessForm are needed here.
 
     remember = BooleanField("Remember Me")
     submit = SubmitField("Login")
+
+
+# TODO: Change password field.
