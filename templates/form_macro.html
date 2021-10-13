@@ -1,0 +1,26 @@
+<!--To be turned into a macro:-->
+<div class="form-group">
+    {{ form.username.label(class="register__label form-group") }}
+
+    {% if form.username.errors %}
+    {{ form.username(class= "form-control is-invalid") }}
+    <div class="invalid-feedback">
+        {% for error in form.username.errors %}
+        <span> {{ error }} </span>
+        {% endfor %}
+    </div>
+    {% else %}
+    {{ form.username(class= "form-control") }}
+    {% endif %}
+</div>
+
+<!--Macro: -->
+{% macro form_template(form) %}
+<div class="form-group">
+
+    <div class="invalid--feedback">
+        <span></span>
+    </div>
+</div>
+
+{% endmacro %}

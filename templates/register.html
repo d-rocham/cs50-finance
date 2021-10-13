@@ -8,7 +8,7 @@ Register
 <!--TODO: Re style-->
 
 <div>
-    <form action="" method="post" action="" class="register__form">
+    <form action="" method="post" action="" class="register__form validate">
         {{ form.hidden_tag() }}
         <fieldset class="register__fieldset form-group">
             <legend>Join Today!</legend>
@@ -17,62 +17,56 @@ Register
                 {{ form.username.label(class="register__label form-group") }}
 
                 {% if form.username.errors %}
-                {{ form.username(class= "form-control is-invalid", placeholder = "Choose an username", autocomplete =
-                "off") }}
+                {{ form.username(class= "form-control is-invalid") }}
                 <div class="invalid-feedback">
                     {% for error in form.username.errors %}
                     <span> {{ error }} </span>
                     {% endfor %}
                 </div>
                 {% else %}
-                {{ form.username(class= "form-control", placeholder = "Choose an username", autocomplete = "off") }}
+                {{ form.username(class= "form-control") }}
                 {% endif %}
             </div>
             <div class="form-group">
                 {{ form.email.label(class="register__label form-group") }}
 
                 {% if form.email.errors %}
-                {{ form.email(class="form-control is-invalid", placeholder = "Enter your email", autocomplete = "off")
-                }}
+                {{ form.email(class="form-control is-invalid") }}
                 <div class="invalid-feedback">
                     {% for error in form.email.errors %}
                     <span> {{ error }} </span>
                     {% endfor %}
                 </div>
                 {% else %}
-                {{ form.email(class="form-control", placeholder = "Enter your email", autocomplete = "off") }}
+                {{ form.email(class="form-control") }}
                 {% endif %}
             </div>
             <div class="form-group">
                 {{ form.password.label(class="register__label form-group") }}
 
                 {% if form.password.errors %}
-                {{ form.password(class="form-control is-invalid", placeholder = "Create a strong password!",
-                autocomplete = "off") }}
+                {{ form.password(class="form-control is-invalid") }}
                 <div class="invalid-feedback">
                     {% for error in form.password.errors %}
                     <span> {{ error }} </span>
                     {% endfor %}
                 </div>
                 {% else %}
-                {{ form.password(class="form-control", placeholder = "Create a strong password!", autocomplete = "off")
-                }}
+                {{ form.password(class="form-control")}}
                 {% endif %}
             </div>
             <div class="form-group">
                 {{ form.passwordConfirmation.label(class="register__label form-group") }}
 
                 {% if form.passwordConfirmation.errors %}
-                {{ form.passwordConfirmation(class="form-control is-invalid", placeholder ="Repeat your password",
-                autocomplete ="off") }}
+                {{ form.passwordConfirmation(class="form-control is-invalid") }}
                 <div class="invalid-feedback">
                     {% for error in form.passwordConfirmation.errors %}
                     <span> {{ error }} </span>
                     {% endfor %}
                 </div>
                 {% else %}
-                {{ form.passwordConfirmation(class="form-control", placeholder ="Repeat your password", autocomplete
-                ="off") }}
+                {{ form.passwordConfirmation(class="form-control") }}
                 {% endif %}
             </div>
             <div class="form-group">
@@ -85,6 +79,7 @@ Register
     </form>
 </div>
 
+<script src="../static/form.js"></script>
 
 
 

@@ -5,7 +5,7 @@ Log In
 {% endblock %}
 
 {% block main %}
-<form action="" method="post">
+<form action="" method="post" class="login__form validate">
     <!--TODO: Re style-->
     {{ form.hidden_tag() }}
     <fieldset class="login__fieldset form-group">
@@ -29,7 +29,8 @@ Log In
             {{ form.password.label(class= "login__label form-group") }}
 
             {% if form.password.errors %}
-            {{ form.password(class="form-control is-invalid", placeholder ="Enter your password", autocomplete = "off")
+            {{ form.password(class="form-control is-invalid", placeholder ="Enter your password", autocomplete = "off",
+            minlength = form.password.validators[1].min)
             }}
             <div class="invalid-feedback">
                 {% for error in form.password.errors %}
@@ -37,7 +38,8 @@ Log In
                 {% endfor %}
             </div>
             {% else %}
-            {{ form.password(class="form-control", placeholder ="Enter your password", autocomplete = "off")}}
+            {{ form.password(class="form-control", placeholder ="Enter your password", autocomplete = "off", minlength =
+            form.password.validators[1].min)}}
             {% endif %}
         </div>
         <div class="form-group">
