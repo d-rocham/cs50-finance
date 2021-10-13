@@ -5,6 +5,26 @@ Log In
 {% endblock %}
 
 {% block main %}
+
+{# render_field() macro definition
+TODO: document #}
+
+{% macro render_field(field) -%}
+
+{{field.label(class="register__label form-group")}}
+
+{% if field.errors %}
+{{ field(class="form-control is-invalid") }}
+<div class="invalid-feedback">
+    {% for error in field.errors %}
+    <span>{{ error }}</span>
+    {% endfor %}
+</div>
+{% else %}
+{{ field(class="form-control")}}
+{% endif %}
+{%- endmacro -%}
+
 <form action="" method="post" class="login__form validate">
     <!--TODO: Re style-->
     {{ form.hidden_tag() }}
@@ -12,35 +32,10 @@ Log In
         <legend>Login!</legend>
 
         <div class="form-group">
-            {{ form.email.label(class= "login__label form-group") }}
-
-            {% if form.email.errors %}
-            {{ form.email(class="form-control is-invalid", placeholder = "Email", autocomplete = "off") }}
-            <div class="invalid-feedback">
-                {% for error in form.email.errors %}
-                <span> {{ error }} </span>
-                {% endfor %}
-            </div>
-            {% else %}
-            {{ form.email(class="form-control", placeholder = "Email", autocomplete = "off")}}
-            {% endif %}
+            {{ render_field(form.email) }}
         </div>
         <div class="form-group">
-            {{ form.password.label(class= "login__label form-group") }}
-
-            {% if form.password.errors %}
-            {{ form.password(class="form-control is-invalid", placeholder ="Enter your password", autocomplete = "off",
-            minlength = form.password.validators[1].min)
-            }}
-            <div class="invalid-feedback">
-                {% for error in form.password.errors %}
-                <span> {{ error }} </span>
-                {% endfor %}
-            </div>
-            {% else %}
-            {{ form.password(class="form-control", placeholder ="Enter your password", autocomplete = "off", minlength =
-            form.password.validators[1].min)}}
-            {% endif %}
+            {{ render_field(form.password) }}
         </div>
         <div class="form-group">
             {{ form.submit(class="btn btn-primary")}}

@@ -1,5 +1,7 @@
 <!--To be turned into a macro:-->
-<div class="form-group">
+<!-- <div class="form-group">
+    {{ render_field(form.username) }}
+
     {{ form.username.label(class="register__label form-group") }}
 
     {% if form.username.errors %}
@@ -13,14 +15,24 @@
     {{ form.username(class= "form-control") }}
     {% endif %}
 </div>
-
+ -->
 <!--Macro: -->
-{% macro form_template(form) %}
-<div class="form-group">
 
-    <div class="invalid--feedback">
-        <span></span>
-    </div>
+<!-- As imported templates have no access to current template variables, this macro cannot be imported.
+This macro is declared and used in login.html and change_password.html -->
+
+{% macro render_field(field) -%}
+
+{{field.label(class="register__label form-group")}}
+
+{% if field.errors %}
+{{ field(class="form-control is-invalid") }}
+<div class="invalid-feedback">
+    {% for error in field.errors %}
+    <span>{{ error }}</span>
+    {% endfor %}
 </div>
-
-{% endmacro %}
+{% else %}
+{{ field(class="form-control")}}
+{% endif %}
+{%- endmacro -%}
