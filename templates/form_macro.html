@@ -3,16 +3,14 @@
     {{ form.username.label(class="register__label form-group") }}
 
     {% if form.username.errors %}
-    {{ form.username(class= "form-control is-invalid", placeholder = "Choose an username", autocomplete =
-    "off", minlength = form.username.validators[1].min, maxlength = form.username.validators[1].max ) }}
+    {{ form.username(class= "form-control is-invalid") }}
     <div class="invalid-feedback">
         {% for error in form.username.errors %}
         <span> {{ error }} </span>
         {% endfor %}
     </div>
     {% else %}
-    {{ form.username(class= "form-control", placeholder = "Choose an username", autocomplete = "off",
-    minlength = form.username.validators[1].min, maxlength = form.username.validators[1].max ) }}
+    {{ form.username(class= "form-control") }}
     {% endif %}
 </div>
 
