@@ -35,6 +35,7 @@ class AccessForm(FlaskForm):
     email = StringField(
         "Email",
         validators=[DataRequired(), Email(message=failed_validation_messages["email"])],
+        render_kw={"type": "email", "placeholder": "Ex. yourname@provider.com"},
     )
     password = PasswordField(
         "Password",
@@ -47,21 +48,35 @@ class AccessForm(FlaskForm):
                 message=failed_validation_messages["password"],
             ),
         ],
+        render_kw={
+            "type": "password",
+            "autocomplete": "off",
+            "minlength": f"{min_pwrd_len}",
+            "placeholder": "Choose a strong password!",
+        },
     )
 
 
 class RegistrationForm(AccessForm):
+    min = AccessForm.min_usr_len
+    max = AccessForm.max_usr_len
 
     username = StringField(
         "Username",
         validators=[
             DataRequired(),
             Length(
-                min=AccessForm.min_usr_len,
-                max=AccessForm.max_usr_len,
+                min=min,
+                max=max,
                 message=AccessForm.failed_validation_messages["username"],
             ),
         ],
+        render_kw={
+            "placeholder": f"Between {min} & {max} characters",
+            "autocomplete": "off",
+            "minlength": f"{min}",
+            "maxlength": f"{max}",
+        },
     )
 
     passwordConfirmation = PasswordField(
@@ -77,6 +92,7 @@ class RegistrationForm(AccessForm):
                 message=AccessForm.failed_validation_messages["password_confirmation"],
             ),
         ],
+        render_kw={"placeholder": "Repeat your password", "autocomplete": "off"},
     )
     submit = SubmitField("Sign Up")
 
