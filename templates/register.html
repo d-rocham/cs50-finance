@@ -7,28 +7,29 @@ Register
 {% block main %}
 <!--TODO: Re style-->
 
-{# render_field() macro definition
-TODO: document #}
+{#
+<!-- render_field() macro definition
+TODO: document --> #}
 
 {% macro render_field(field) -%}
 
 {{field.label(class="register__label form-group")}}
 
 {% if field.errors %}
-{{ field(class="form-control is-invalid") }}
+{{ field(class="form-control is-invalid validate") }}
 <div class="invalid-feedback">
     {% for error in field.errors %}
     <span>{{ error }}</span>
     {% endfor %}
 </div>
 {% else %}
-{{ field(class="form-control")}}
+{{ field(class="form-control validate")}}
 {% endif %}
 {%- endmacro -%}
 
 
 <div>
-    <form action="" method="post" action="" class="register__form validate">
+    <form action="" method="post" action="" class="register__form form--validate">
         {{ form.hidden_tag() }}
         <fieldset class="register__fieldset form-group">
             <legend>Join Today!</legend>
@@ -54,5 +55,5 @@ TODO: document #}
     </form>
 </div>
 
-<script src="../static/form.js"></script>
+<!-- <script src="../static/form.js"></script> -->
 {% endblock %}

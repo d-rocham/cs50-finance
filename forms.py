@@ -53,6 +53,8 @@ class AccessForm(FlaskForm):
             "autocomplete": "off",
             "minlength": f"{min_pwrd_len}",
             "placeholder": "Choose a strong password!",
+            "pattern": f"{str(passwordRe.pattern)}",
+            "title": "Your password must be at least 8 characters long and should have at least one UPPER case letter, one lower case letter, one number and one special character",
         },
     )
 
