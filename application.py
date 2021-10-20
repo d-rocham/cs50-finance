@@ -1,3 +1,4 @@
+from enum import unique
 import os
 from flask.helpers import url_for
 
@@ -6,6 +7,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask import Flask, flash, redirect, render_template, request, session
 from flask_session import Session
 from tempfile import mkdtemp
+from sqlalchemy.orm import backref
 
 from werkzeug.exceptions import default_exceptions, HTTPException, InternalServerError
 from werkzeug.security import check_password_hash, generate_password_hash
@@ -39,33 +41,59 @@ Session(app)
 
 # Open database
 # TODO: check that this is working properly through debugger.
-# TODO: organize this better
-basedir = os.path.abspath(os.path.dirname(__file__))
 
-app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///" + os.path.join(
-    basedir, "finance.db"
-)
+app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///finance.db"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+
+# Make sure API key is set
+if not os.environ.get("API_KEY"):
+    raise RuntimeError("API_KEY not set")
 
 db = SQLAlchemy(app)
 
 
 class Users(db.Model):
-    # TODO: figure out hash lenght later
-    __tablename__ = "users"
-    id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(30), unique=True, nullable=False)
-    email = db.Column(db.String(20), unique=True, nullable=False)
-    hash = db.Column(db.String(60), nullable=False)
-    cash = db.Column(db.Numeric, nullable=False, default=10000.00)
+    # Table columns
+    usr_id = db.Column(db.Integer, primary_key=True, unique=True, index=True)
+    username = db.Column(db.String(20), unique=True, nullable=False)
+    email = db.Column(db.String(120), unique=True, nullable=False)
+    pwrd_hash = db.Column(db.String(60), nullable=False)
+    cash = db.Column(db.Float, nullable=False, default=10000.00)
+
+    # Table relations
+    owned_stock = db.relationship("OwnedStock", backref="owner_id", lazy=True)
+    transaction_history = db.relationship(
+        "TransactionHistory", backref="usr_id", lazy=True
+    )
 
     def __repr__(self):
-        return f"User('{self.id}', '{self.username}', '{self.email}', {self.cash}')"
+        return f"User({self.username}, {self.email} with {self.cash})"
 
 
-# Make sure API key is set
-if not os.environ.get("API_KEY"):
-    raise RuntimeError("API_KEY not set")
+class OwnedStock(db.Model):
+    owner_id = db.Column(
+        db.Integer, db.ForeignKey("users.usr_id"), nullable=False, index=True
+    )
+    stock_symbol = db.Column(db.String(8), nullable=False)
+    cost_on_purchase = db.Column(db.Float, nullable=False)
+    num_of_shares = db.Column(db.Integer, nullable=False)
+
+    def __repr__(self):
+        return f"OwnedStock({self.owner_id}, {self.stock_symbol}, {self.cost_on_purchase}, {self.num_of_shares})"
+
+
+class TransactionHistory(db.Model):
+    usr_id = db.Column(
+        db.Integer, db.ForeignKey("users.usr_id"), nullable=False, index=True
+    )
+    stock_symbol = db.Column(db.String(8), nullable=False)
+    action = db.Column(db.String(8), nullable=False)
+    affected_number = db.Column(db.Integer, nullable=False)
+    cost_on_action = db.Column(db.Float, nullable=False)
+    date = db.Column(db.DateTime, nullable=False)
+
+    def __repr__(self):
+        return f"TransactionHistory({self.usr_id}, {self.stock_symbol}, {self.action}, {self.affected_number}, {self.cost_on_action}, {self.date})"
 
 
 @app.route("/login", methods=["GET", "POST"])
