@@ -46,33 +46,32 @@ app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///finance.db"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
 # Make sure API key is set
-if not os.environ.get("API_KEY"):
-    raise RuntimeError("API_KEY not set")
+""" if not os.environ.get("API_KEY"):
+    raise RuntimeError("API_KEY not set") """
 
 db = SQLAlchemy(app)
 
-
+# ATTENTION: TODO: For every db model change repr formatting.
 class Users(db.Model):
     # Table columns
-    usr_id = db.Column(db.Integer, primary_key=True, unique=True, index=True)
+    id = db.Column(db.Integer, primary_key=True, unique=True, index=True)
     username = db.Column(db.String(20), unique=True, nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
     pwrd_hash = db.Column(db.String(60), nullable=False)
     cash = db.Column(db.Float, nullable=False, default=10000.00)
 
     # Table relations
-    owned_stock = db.relationship("OwnedStock", backref="owner_id", lazy=True)
-    transaction_history = db.relationship(
-        "TransactionHistory", backref="usr_id", lazy=True
-    )
+    owned_stock = db.relationship("OwnedStock", backref="owner", lazy=True)
+    user_transactions = db.relationship("Transactions", backref="user", lazy=True)
 
     def __repr__(self):
-        return f"User({self.username}, {self.email} with {self.cash})"
+        return f"Users({self.username}, {self.email} with {self.cash})"
 
 
 class OwnedStock(db.Model):
-    owner_id = db.Column(
-        db.Integer, db.ForeignKey("users.usr_id"), nullable=False, index=True
+    entry_id = db.Column(db.Integer, primary_key=True, unique=True)
+    user_id = db.Column(
+        db.Integer, db.ForeignKey("users.id"), nullable=False, index=True
     )
     stock_symbol = db.Column(db.String(8), nullable=False)
     cost_on_purchase = db.Column(db.Float, nullable=False)
@@ -82,9 +81,10 @@ class OwnedStock(db.Model):
         return f"OwnedStock({self.owner_id}, {self.stock_symbol}, {self.cost_on_purchase}, {self.num_of_shares})"
 
 
-class TransactionHistory(db.Model):
-    usr_id = db.Column(
-        db.Integer, db.ForeignKey("users.usr_id"), nullable=False, index=True
+class Transactions(db.Model):
+    transaction_id = db.Column(db.Integer, primary_key=True, unique=True)
+    user_id = db.Column(
+        db.Integer, db.ForeignKey("users.id"), nullable=False, index=True
     )
     stock_symbol = db.Column(db.String(8), nullable=False)
     action = db.Column(db.String(8), nullable=False)
@@ -93,7 +93,7 @@ class TransactionHistory(db.Model):
     date = db.Column(db.DateTime, nullable=False)
 
     def __repr__(self):
-        return f"TransactionHistory({self.usr_id}, {self.stock_symbol}, {self.action}, {self.affected_number}, {self.cost_on_action}, {self.date})"
+        return f"Transactions({self.usr_id}, {self.stock_symbol}, {self.action}, {self.affected_number}, {self.cost_on_action}, {self.date})"
 
 
 @app.route("/login", methods=["GET", "POST"])
