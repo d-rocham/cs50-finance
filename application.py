@@ -40,8 +40,6 @@ app.config["SESSION_TYPE"] = "filesystem"
 Session(app)
 
 # Open database
-# TODO: check that this is working properly through debugger.
-
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///finance.db"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
@@ -51,7 +49,7 @@ app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
 db = SQLAlchemy(app)
 
-# ATTENTION: TODO: For every db model change repr formatting.
+
 class Users(db.Model):
     # Table columns
     id = db.Column(db.Integer, primary_key=True, unique=True, index=True)
@@ -65,7 +63,7 @@ class Users(db.Model):
     user_transactions = db.relationship("Transactions", backref="user", lazy=True)
 
     def __repr__(self):
-        return f"Users({self.username}, {self.email} with {self.cash})"
+        return f"Users('{self.username}', '{self.email}' with '{self.cash}')"
 
 
 class OwnedStock(db.Model):
@@ -78,7 +76,7 @@ class OwnedStock(db.Model):
     num_of_shares = db.Column(db.Integer, nullable=False)
 
     def __repr__(self):
-        return f"OwnedStock({self.owner_id}, {self.stock_symbol}, {self.cost_on_purchase}, {self.num_of_shares})"
+        return f"OwnedStock('{self.user_id}', '{self.stock_symbol}', '{self.cost_on_purchase}', '{self.num_of_shares}')"
 
 
 class Transactions(db.Model):
@@ -93,7 +91,7 @@ class Transactions(db.Model):
     date = db.Column(db.DateTime, nullable=False)
 
     def __repr__(self):
-        return f"Transactions({self.usr_id}, {self.stock_symbol}, {self.action}, {self.affected_number}, {self.cost_on_action}, {self.date})"
+        return f"Transactions('{self.user_id}', '{self.stock_symbol}', '{self.action}', '{self.affected_number}', '{self.cost_on_action}', '{self.date}')"
 
 
 @app.route("/login", methods=["GET", "POST"])
