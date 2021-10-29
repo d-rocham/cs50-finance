@@ -1,4 +1,3 @@
-from enum import unique
 import os
 from flask.helpers import url_for
 
@@ -22,18 +21,22 @@ app.config["TEMPLATES_AUTO_RELOAD"] = True
 app.config["SECRET_KEY"] = "9d7daea4a862dd6513fee22b8223ad73"
 
 # Ensure responses aren't cached
-@app.after_request
+@app.after_request  # TO UNDERSTAND: what does this decorator do? Why is it needed (it comes from CS50 staff)
 def after_request(response):
+    """
+    TO UNDERSTAND: Why are these headers being changed?
+    TO UNDERSTAND: What is "Cache-Control", "Expires", Pragma"?
+    """
     response.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
     response.headers["Expires"] = 0
     response.headers["Pragma"] = "no-cache"
-    return response
+    return response  # TO UNDERSTAND: Who receives the response back?
 
 
 # Custom filter
-app.jinja_env.filters["usd"] = usd
+app.jinja_env.filters["usd"] = usd  # TO UNDERSTAND: How does this work?
 
-# Configure session to use filesystem (instead of signed cookies)
+# Configure session to use filesystem (instead of signed cookies) #TODO: Come back to this when Corey's tutorial reachies user authentication & Sessions
 app.config["SESSION_FILE_DIR"] = mkdtemp()
 app.config["SESSION_PERMANENT"] = False
 app.config["SESSION_TYPE"] = "filesystem"
@@ -98,7 +101,7 @@ class Transactions(db.Model):
 def login():
     form = LoginForm()
     # Forget any user_id
-    session.clear()  # TODO: check this later on. Why is it here?
+    session.clear()
 
     if request.method == "POST":
         if form.validate_on_submit():  # If form validation succesful
@@ -208,6 +211,11 @@ def sell():
     return apology("TODO")
 
 
+"""
+TO UNDERSTAND: what is e? Where does it come from?
+"""
+
+
 def errorhandler(e):
     """Handle error"""
     if not isinstance(e, HTTPException):
@@ -215,6 +223,13 @@ def errorhandler(e):
     return apology(e.name, e.code)
 
 
+"""
+TO UNDERSTAND: How does this loop work? 
+TO UNDERSTAND: When is it called? 
+TO UNDERSTAND: Whie does "errorhandler" take 2 arguments?
+"""
 # Listen for errors
-for code in default_exceptions:
-    app.errorhandler(code)(errorhandler)
+for code in default_exceptions:  # TO UNDERSTAND: What is default_exceptions made of?
+    app.errorhandler(code)(
+        errorhandler
+    )  # TO UNDERSTAND: Where does errorhandler come from?
