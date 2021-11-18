@@ -1,0 +1,18 @@
+BASIC CS50 REQUIREMENTS
+
+PERSONAL TOUCHES
+    * Ask users for their email
+    * Let them change their password
+    * Let them delete their account.
+    * Let them receive a simple email with their stocks
+
+PROJECT TECHNICAL REQUIREMENTS:
+    * Database management through SQLAlchemy
+    * Form management through WTForms (existing & new)
+    * Implement CS50 version of user authentication, then use Gringberg's approach
+    
+
+TODO:
+    * Add email column to database
+    * Check through debugger that database connection works
+    * Replace implemented forms with WTF forms (login, register)

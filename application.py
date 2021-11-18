@@ -1,4 +1,3 @@
-from enum import unique
 import os
 from flask.helpers import url_for
 
@@ -14,6 +13,7 @@ from werkzeug.security import check_password_hash, generate_password_hash
 
 from helpers import apology, login_required, lookup, usd
 from forms import RegistrationForm, LoginForm
+from models import Users, OwnedStock, Transactions
 
 # Configure application
 app = Flask(__name__)
@@ -33,7 +33,7 @@ def after_request(response):
 # Custom filter
 app.jinja_env.filters["usd"] = usd
 
-# Configure session to use filesystem (instead of signed cookies)
+# Configure session to use filesystem (instead of signed cookies) #TODO: Come back to this when Corey's tutorial reachies user authentication & Sessions
 app.config["SESSION_FILE_DIR"] = mkdtemp()
 app.config["SESSION_PERMANENT"] = False
 app.config["SESSION_TYPE"] = "filesystem"
@@ -50,7 +50,7 @@ app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 db = SQLAlchemy(app)
 
 
-class Users(db.Model):
+""" class Users(db.Model):
     # Table columns
     id = db.Column(db.Integer, primary_key=True, unique=True, index=True)
     username = db.Column(db.String(20), unique=True, nullable=False)
@@ -91,14 +91,14 @@ class Transactions(db.Model):
     date = db.Column(db.DateTime, nullable=False)
 
     def __repr__(self):
-        return f"Transactions('{self.user_id}', '{self.stock_symbol}', '{self.action}', '{self.affected_number}', '{self.cost_on_action}', '{self.date}')"
+        return f"Transactions('{self.user_id}', '{self.stock_symbol}', '{self.action}', '{self.affected_number}', '{self.cost_on_action}', '{self.date}')" """
 
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
     form = LoginForm()
     # Forget any user_id
-    session.clear()  # TODO: check this later on. Why is it here?
+    session.clear()
 
     if request.method == "POST":
         if form.validate_on_submit():  # If form validation succesful
