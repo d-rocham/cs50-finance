@@ -13,4 +13,9 @@ TODO.txt
 Mockup_README.md
 financedb_schema.txt
 
+#Other files to ignore
+finance.db
+other/
+mockups/
+
 
