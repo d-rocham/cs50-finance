@@ -2,16 +2,8 @@
 venv/
 
 #Ignore vscode config file, pycache
-.vscode/*
+.vscode/
 __pycache__/
-
-#Don't ignore launch.json, which includes API key
-!.vscode/launch.json
-
-#Ignore TODO.txt
-TODO.txt
-Mockup_README.md
-financedb_schema.txt
 
 #Other files to ignore
 finance.db
