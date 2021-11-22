@@ -1,4 +1,10 @@
-from flask import render_template
+# ATTENTION: this import list is complete, but not all the imports are currently in forms
+
+from flask import render_template, request, flash, session
+
+from main import flash, apology
+
+from forms import LoginForm, RegistrationForm
 
 from . import auth
 
@@ -48,7 +54,7 @@ def login():
         return render_template("login.html", form=form)
 
 
-@main.route("/register", methods=["GET", "POST"])
+@auth.route("/register", methods=["GET", "POST"])
 def register():
     """Register user"""
     form = RegistrationForm()

@@ -1,16 +1,21 @@
+from operator import index
 from application import db
 from sqlalchemy.orm import backref
 from werkzeug.security import generate_password_hash, check_password_hash
+from flask_login import UserMixin
+
+from . import login_manager
+
 
 # TODO: Create db again :(
 
 
-class Users(db.Model):
+class Users(UserMixin, db.Model):
     """Table columns"""
 
-    id = db.Column(db.Integer, primary_key=True, unique=True, index=True)
-    username = db.Column(db.String(20), unique=True, nullable=False)
-    email = db.Column(db.String(120), unique=True, nullable=False)
+    id = db.Column(db.Integer, primary_key=True, unique=True)
+    username = db.Column(db.String(20), unique=True, nullable=False, index=True)
+    email = db.Column(db.String(120), unique=True, nullable=False, index=True)
     pwrd_hash = db.Column(db.String(128), nullable=False)
     cash = db.Column(db.Float, nullable=False, default=10000.00)
 
@@ -63,3 +68,8 @@ class Transactions(db.Model):
 
     def __repr__(self):
         return f"Transactions('{self.user_id}', '{self.stock_symbol}', '{self.action}', '{self.affected_number}', '{self.cost_on_action}', '{self.date}')"
+
+
+@login_manager.user_loader
+def load_user(user_id):
+    return Users.query.get(int(user_id))
