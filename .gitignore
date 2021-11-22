@@ -1,13 +1,12 @@
-#Ignore venv folder
+#Folders to ignore
 venv/
-
-#Ignore vscode config file, pycache
-.vscode/
-__pycache__/
-
-#Other files to ignore
-finance.db
 other/
 mockups/
+
+#Files to ignore
+.vscode/
+__pycache__/
+finance.db
+application.py
 
 
