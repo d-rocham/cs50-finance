@@ -8,5 +8,6 @@ mockups/
 __pycache__/
 finance.db
 application.py
+.env
 
 

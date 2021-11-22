@@ -1,8 +1,10 @@
 import os
 from tempfile import mkdtemp
+from dotenv import load_dotenv
 
 # TO UNDERSTAND:
 basedir = os.path.abspath(os.path.dirname(__file__))
+load_dotenv(os.path.join(basedir, ".env"))
 
 
 class Config:
@@ -10,8 +12,8 @@ class Config:
     Configuration base settings
     """
 
-    SECRET_KEY = os.environ.get("SECRET_KEY") or "9d7daea4a862dd6513fee22b8223ad73"
-    API_KEY = os.environ.get("API_KEY") or "pk_50b635ec6ed94958956473499a25881b"
+    SECRET_KEY = os.environ.get("SECRET_KEY")
+    API_KEY = os.environ.get("API_KEY")
     TEMPLATES_AUTO_RELOAD = True
 
     SQLALCHEMY_TRACK_MODIFICATIONS = False
@@ -24,8 +26,6 @@ class Config:
     SESSION_TYPE = "filesystem"
 
     # ATTENTION: Do jinja filters go in here?
-    # ATTENTION: Do cache settings go in here?
-    # ATTENTION: How to set API key from here?
 
     @staticmethod  # TODO:
     def init_app(app):
