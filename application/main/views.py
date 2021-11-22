@@ -1,4 +1,5 @@
 from flask import flash, redirect, render_template, request, session, url_for
+from flask_login import login_required
 
 # ATTENTION: Remember that, within a blueprint, Flask applies a namespace to all the endpoints of a blueprint.
 # Hence,`url_for` must be used as `url_for(main.<desired url>)` or as `url_for(.<desired url>)`
@@ -71,6 +72,7 @@ def login():
 
 
 @main.route("/logout")
+@login_required()
 def logout():
     """Log user out"""
 
