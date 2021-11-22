@@ -2,7 +2,6 @@ import os
 from tempfile import mkdtemp
 from dotenv import load_dotenv
 
-# TO UNDERSTAND:
 basedir = os.path.abspath(os.path.dirname(__file__))
 load_dotenv(os.path.join(basedir, ".env"))
 

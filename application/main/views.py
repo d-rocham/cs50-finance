@@ -5,7 +5,7 @@ from flask import flash, redirect, render_template, request, session, url_for
 
 from . import main
 from .forms import RegistrationForm, LoginForm
-from .. import db  # TODO: What is db? Where is db? -> Unique to Gringberg's example
+from .. import db
 from ..models import Users, OwnedStock, Transactions
 from .helpers import apology, login_required, lookup, usd
 
@@ -17,7 +17,7 @@ from application.forms import RegistrationForm, LoginForm
  """
 
 # Ensure responses aren't cached
-@main.after_request  # TODO: is main instead of app. correct?
+@main.after_request
 def after_request(response):
     response.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
     response.headers["Expires"] = 0
