@@ -6,16 +6,32 @@ from werkzeug.security import generate_password_hash, check_password_hash
 
 
 class Users(db.Model):
-    # Table columns
+    """Table columns"""
+
     id = db.Column(db.Integer, primary_key=True, unique=True, index=True)
     username = db.Column(db.String(20), unique=True, nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
     pwrd_hash = db.Column(db.String(128), nullable=False)
     cash = db.Column(db.Float, nullable=False, default=10000.00)
 
-    # Table relations
+    """ Table relations """
     owned_stock = db.relationship("OwnedStock", backref="owner", lazy=True)
     user_transactions = db.relationship("Transactions", backref="user", lazy=True)
+
+    """ Set password property & password methods """
+
+    @property  # Set getter. Unable to retrive password from stored hash
+    def password(self):
+        raise AttributeError("password is not a readable attribute")
+
+    @password.setter
+    def password(self, incoming_password):
+        self.pwrd_hash = generate_password_hash(incoming_password)
+
+    def verify_password(self, incoming_password):
+        return check_password_hash(self.pwrd_hash, incoming_password)
+
+    """ Representation method """
 
     def __repr__(self):
         return f"Users('{self.username}', '{self.email}' with '{self.cash}')"
