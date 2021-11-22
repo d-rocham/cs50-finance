@@ -1,4 +1,4 @@
-{% extends "../layout.html" %}
+{% extends "./layout.html" %}
 
 {% block title %}
 Log In
@@ -44,7 +44,7 @@ TODO: document #}
             {{ form.submit(class="btn btn-primary")}}
         </div>
         <div class="small text-center text-muted">
-            <small>No account yet? <a href="{{ url_for('main.register') }}">Register now!</a></small>
+            <small>No account yet? <a href="{{ url_for('auth.register') }}">Register now!</a></small>
         </div>
     </fieldset>
 
