@@ -1,5 +1,8 @@
 from application import db
 from sqlalchemy.orm import backref
+from werkzeug.security import generate_password_hash, check_password_hash
+
+# TODO: Create db again :(
 
 
 class Users(db.Model):
@@ -7,7 +10,7 @@ class Users(db.Model):
     id = db.Column(db.Integer, primary_key=True, unique=True, index=True)
     username = db.Column(db.String(20), unique=True, nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
-    pwrd_hash = db.Column(db.String(60), nullable=False)
+    pwrd_hash = db.Column(db.String(128), nullable=False)
     cash = db.Column(db.Float, nullable=False, default=10000.00)
 
     # Table relations
