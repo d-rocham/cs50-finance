@@ -32,12 +32,11 @@ def login():
             """ flash(f"Loged in as {form.email.data}!", "success")
             return apology("LOGGED IN!") """
             # Session.clear() prevents apology to work.
-        else:
-            return render_template("auth/login.html", form=form)
+
+        return render_template("auth/login.html", form=form)
 
     # User reached route via GET (as by clicking a link or via redirect)
-    else:
-        return render_template("auth/login.html", form=form)
+    return render_template("auth/login.html", form=form)
 
 
 @auth.route("/register", methods=["GET", "POST"])
